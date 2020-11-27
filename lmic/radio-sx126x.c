@@ -790,6 +790,12 @@ void radio_init (bool calibrate) {
         CalibrateImage(LMIC.freq);
     }
 
+#if defined(BRD_sx1262_radio)
+    // perform a fix for better TX performance on mismatched antenna
+    // see datasheet, section "Known Limitations"
+    WriteReg(0x8D8, ReadReg(0x8D8) | 0x1E);
+#endif
+
     // go to SLEEP mode
     radio_sleep();
 
